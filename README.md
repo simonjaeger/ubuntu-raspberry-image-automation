@@ -1,4 +1,4 @@
-# Automated Ubuntu image building for Raspberry Pi 
+# Automated Ubuntu image building for Raspberry Pi (POC)
 
 This repository contains a simple script to automate the process of building custom Ubuntu images for the Raspberry Pi. It provides two ways of customizing the image:
 
