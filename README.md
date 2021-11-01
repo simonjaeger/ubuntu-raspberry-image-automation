@@ -13,7 +13,7 @@ In this section, the arguments of the tool are described. All arguments are opti
 1. `-v` `[18.04.5|20.04.3]`: Target version of Ubuntu.
 1. `-h` `[raspi|raspi2|raspi3|raspi4]`: Target hardware for image. It is important to provide the right value `[raspi2|raspi3|raspi4]` for Ubuntu 18.04.5 and `[raspi]` for Ubuntu 20.04.3. The value must align with available downloads from [https://cdimage.ubuntu.com/releases/](https://cdimage.ubuntu.com/releases/). 
 1. `-s` `[path]`: Script file to customize image inside chroot.
-1. `-c` `[path]`: Cloud-init configuration file to customize image.
+1. `-c` `[path]`: Cloud-init configuration file to customize image after system boot.
 1. `-o` `[path]`: Output image file.
 1. `-q`: Enable virtualization with QEMU (unstable).
 
