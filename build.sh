@@ -14,13 +14,13 @@ enableqemu=false
 # Parse arguments.
 while getopts a:v:h:s:c:i:o:q flag; do
     case "${flag}" in
-    a) arch=${OPTARG} ;;
-    v) version=${OPTARG} ;;
-    h) hardware=${OPTARG} ;;
-    s) scriptfile=${OPTARG} ;;
-    c) cloudinitfile=${OPTARG} ;;
-    o) outputfile=${OPTARG} ;;
-    q) enableqemu=true ;;
+        a) arch=${OPTARG} ;;
+        v) version=${OPTARG} ;;
+        h) hardware=${OPTARG} ;;
+        s) scriptfile=${OPTARG} ;;
+        c) cloudinitfile=${OPTARG} ;;
+        o) outputfile=${OPTARG} ;;
+        q) enableqemu=true ;;
     esac
 done
 
@@ -68,14 +68,14 @@ dd if=/dev/zero bs=1M count=1024 >>"$tmpdir/$uuid.img"
 dev=$(losetup --partscan --find --show "$tmpdir/$uuid.img")
 
 # Resize second partition.
-# TODO: Calculcate offsets.
+# TODO: Calculate offsets.
 parted --script $dev \
-    print \
-    rm 2 \
-    mkpart primary 269 3698 \
-    print \
-    quit \
-    resize2fs "$dev"p2
+print \
+rm 2 \
+mkpart primary 269 3698 \
+print \
+quit \
+resize2fs "$dev"p2
 
 # Mount partitions.
 echo "Mounting partitions..."
@@ -94,19 +94,19 @@ if [ ! -z "$scriptfile" ]; then
         mount --bind /sys "/mnt/$uuid/sys/"
         mount --bind /proc "/mnt/$uuid/proc/"
         mount --bind /dev/pts "/mnt/$uuid/dev/pts"
-
+        
         # Copy script file and ensure there is an exit statement in it.
         echo "Running chroot..."
         cp "$scriptfile" "/mnt/$uuid/tmp/run"
         echo -e "\nexit" >>"/mnt/$uuid/tmp/run"
-
+        
         # Execute chroot. The architecture of the current system must align with
         # the target architecture. Unless virtualization is enabled with QEMU.
         chroot "/mnt/$uuid" /bin/bash /tmp/run
-
+        
         # Remove script file.
         rm "/mnt/$uuid/tmp/run"
-
+        
         # Unmount host directories.
         echo "Unmounting host directories..."
         umount "/mnt/$uuid/run"
@@ -119,13 +119,16 @@ if [ ! -z "$scriptfile" ]; then
     fi
 fi
 
-# Check cloud-init file.
-if [ -f "$cloudinitfile" ]; then
-    # Copy cloud-init file.
-    echo "Copying cloud-init file..."
-    cp "$cloudinitfile" "/mnt/$uuid/etc/cloud/cloud.cfg"
-else
-    echo "Cannot find cloud-init file."
+# Run cloud-init file.
+if [ ! -z "$cloudinitfile" ]; then
+    # Check cloud-init file.
+    if [ -f "$cloudinitfile" ]; then
+        # Copy cloud-init file.
+        echo "Copying cloud-init file..."
+        cp "$cloudinitfile" "/mnt/$uuid/etc/cloud/cloud.cfg"
+    else
+        echo "Cannot find cloud-init file."
+    fi
 fi
 
 # Unmount partitions.
